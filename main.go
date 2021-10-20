@@ -60,7 +60,7 @@ func main() {
 	for {
 		entries := getEntries(topicList[selectedIndex].URL, fmt.Sprintf("%v", page))
 		for _, entry := range entries {
-			pretty_print(entry)
+			prettyPrint(entry)
 		}
 
 		selectedAction, err := selectAction.Run()
@@ -80,7 +80,7 @@ func main() {
 	}
 }
 
-func pretty_print(entry entry) {
+func prettyPrint(entry entry) {
 	fmt.Println()
 
 	color.Set(color.BgGreen, color.FgBlack)
@@ -99,11 +99,11 @@ func getTopics() []string {
 	c := colly.NewCollector()
 
 	c.OnHTML("ul.topic-list > li > a", func(e *colly.HTMLElement) {
-		new_topic := topic{}
-		new_topic.URL = e.Attr("href")
-		new_topic.Content = e.Text
+		newTopic := topic{}
+		newTopic.URL = e.Attr("href")
+		newTopic.Content = e.Text
 
-		topicList = append(topicList, new_topic)
+		topicList = append(topicList, newTopic)
 		topicListString = append(topicListString, e.Text)
 	})
 	c.OnRequest(func(r *colly.Request) {
@@ -119,13 +119,13 @@ func getEntries(url, page string) []entry {
 	c := colly.NewCollector()
 
 	c.OnHTML("#entry-item-list > li", func(e *colly.HTMLElement) {
-		new_entry := entry{}
-		new_entry.Author = e.Attr("data-author")
-		new_entry.Content = e.ChildText("div.content")
-		new_entry.Date = e.ChildText("footer > div.info > a.entry-date.permalink")
-		new_entry.FavCount = e.Attr("data-favorite-count")
+		newEntry := entry{}
+		newEntry.Author = e.Attr("data-author")
+		newEntry.Content = e.ChildText("div.content")
+		newEntry.Date = e.ChildText("footer > div.info > a.entry-date.permalink")
+		newEntry.FavCount = e.Attr("data-favorite-count")
 
-		entries = append(entries, new_entry)
+		entries = append(entries, newEntry)
 	})
 	c.OnRequest(func(r *colly.Request) {
 		fmt.Print("Visiting ", r.URL, "\n\n")
